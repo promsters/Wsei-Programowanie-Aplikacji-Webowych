@@ -1,3 +1,3 @@
 export interface CalculatorInterface {
-    calculate(numbers: Array<number>): number;
+    calculate(numbers: number[]): number;
 }
