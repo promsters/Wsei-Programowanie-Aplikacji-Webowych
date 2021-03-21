@@ -1,4 +1,4 @@
-const boomSound = require('../assets/sounds/boom.wav');
+import {EventDispatcher, Handler} from "./EventDispatcher";
 
 export class PianoController {
     element : HTMLElement;
@@ -11,12 +11,12 @@ export class PianoController {
         this.init();
     }
 
-    init(): void {
+    private init(): void {
         this.registerKeys();
         this.registerKeyboard();
     }
 
-    registerKeyboard(): void {
+    private registerKeyboard(): void {
         document.addEventListener('keypress', (event) => {
             const pianoKey = this.getPianoKeyWithName(event.key);
 
@@ -26,7 +26,7 @@ export class PianoController {
         });
     }
 
-    registerKeys(): void {
+    private registerKeys(): void {
         this.element.querySelectorAll('button').forEach((button) => {
             this.keys.push({
                 element: button,
@@ -36,7 +36,7 @@ export class PianoController {
         });
     }
 
-    getPianoKeyWithName(name: string): PianoKey {
+    private getPianoKeyWithName(name: string): PianoKey {
         let found = null;
         this.keys.forEach((pianoKey) => {
             if (pianoKey.name === name) {
@@ -47,9 +47,13 @@ export class PianoController {
         return found;
     }
 
-    triggerKey(pianoKey : PianoKey): void {
-        console.log(pianoKey.name, pianoKey.sound);
-        new Audio(boomSound).play();
+    private triggerKey(pianoKey : PianoKey): void {
+        this.playKeyEventEventDispatcher.fire({pianoKey: pianoKey});
+    }
+
+    private playKeyEventEventDispatcher = new EventDispatcher<PianoPlayKeyEvent>();
+    public onPlayKeyEvent(handler: Handler<PianoPlayKeyEvent>) {
+        this.playKeyEventEventDispatcher.register(handler);
     }
 }
 
@@ -57,4 +61,8 @@ interface PianoKey {
     element: HTMLButtonElement;
     name : string;
     sound : string;
+}
+
+export interface PianoPlayKeyEvent{
+    pianoKey: PianoKey;
 }

@@ -11,12 +11,15 @@ module.exports = {
             },
             {
                 test: /\.wav$/,
-                loader: 'file-loader'
+                loader: 'file-loader',
+                options: {
+                    name: '[path][name].[ext]',
+                }
             }
         ],
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.wav'],
+        extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
         filename: 'bundle.js',
