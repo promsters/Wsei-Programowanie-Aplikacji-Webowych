@@ -1,6 +1,8 @@
 # Directories
 .idea/
+*/dist/
+*/node_modules/
 
 # Files
-*.js
-*.js.map
+*/dist/*.js
+*/dist/*.js.map
