@@ -17,5 +17,8 @@
     "dev": "webpack --mode=development",
     "build": "webpack",
     "start": "webpack-dev-server --content-base src"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3"
   }
 }

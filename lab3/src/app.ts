@@ -27,7 +27,7 @@ export class App {
         this.getData();
 
         this.cities.forEach((city) => {
-            this.createCityDomElement(city);
+            this.renderCity(city);
         });
     }
 
@@ -41,20 +41,52 @@ export class App {
             this.cities.push(city);
             this.saveData();
 
-            this.createCityDomElement(city);
+            this.renderCity(city, data);
         });
     }
 
-    private createCityDomElement(city: string): void {
-        const element = document.createElement('div');
-        element.classList.add('city');
-        element.innerText = city;
+    private renderCity(city: string, cityData?: ApiCityWeatherData): void {
+        if (cityData) {
+            this.createCityDomElement(cityData);
+            return;
+        }
+
+        this.getWeather(city).then((data) => {
+            console.log(data);
+            this.createCityDomElement(data);
+        });
+    }
+
+    private createCityDomElement(cityData: ApiCityWeatherData): void {
+        const element = this.citiesContainer.querySelector('.city.prototype').cloneNode(true) as HTMLElement;
+        element.classList.remove('prototype');
+
+        element.querySelector('.header h2').innerHTML = cityData.name;
+        element.querySelector('.header span').innerHTML = `${cityData.main.temp.toFixed(0)}°`;
+        element.querySelector('.header img').setAttribute('src', `http://openweathermap.org/img/w/${cityData.weather.pop().icon}.png`)
+
+        element.querySelectorAll('.details div').forEach((detail: HTMLElement) => {
+            const valueEl = detail.querySelector('.value');
+            let value = '';
+
+            if (detail.dataset.type === 'pressure') {
+                value = `${cityData.main.pressure} hPa`;
+            } else if (detail.dataset.type === 'humidity') {
+                value = `${cityData.main.humidity} %`;
+            } else if (detail.dataset.type === 'cloud') {
+                value = `${cityData.clouds.all} %`;
+            } else if (detail.dataset.type === 'wind') {
+                value = `${cityData.wind.speed} m/s <span class="wind-arrow" style="--degree: ${cityData.wind.deg}"></span>`;
+            }
+
+            valueEl.innerHTML = value;
+        });
 
         this.citiesContainer.appendChild(element);
     }
 
     private async getWeather(city: string): Promise<any> {
-        const openWeatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${this.opwApiKey}`;
+        const openWeatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${this.opwApiKey}`;
         const weatherResponse = await fetch(openWeatherUrl);
 
         return await weatherResponse.json();
@@ -70,4 +102,34 @@ export class App {
             this.cities = JSON.parse(data);
         }
     }
+}
+
+interface ApiCityWeatherData {
+    name: string;
+    clouds: CloudData;
+    weather: WeatherData[];
+    main: SensorData;
+    wind: WindData;
+}
+
+interface CloudData {
+    all: number;
+}
+
+interface SensorData {
+    temp: number;
+    humidity: number;
+    pressure: number;
+}
+
+interface WindData {
+    deg: number;
+    speed: number;
+}
+
+interface WeatherData {
+    description: string;
+    icon: string;
+    id: number;
+    main: string;
 }

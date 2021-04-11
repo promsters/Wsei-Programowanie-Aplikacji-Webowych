@@ -3,6 +3,7 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
+  font-family: "FiraSans",Arial,Helvetica,Verdana,sans-serif;
 }
 
 * {
@@ -47,8 +48,50 @@ body {
     flex-grow: 1;
     min-width: 180px;
     max-width: 250px;
-    background-color: red;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 5px;
-    height: 100px;
+
+    &.prototype {
+      display: none;
+    }
+
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+
+      h2 {
+        flex: 0 1 100%;
+        margin: 0;
+        display: inline;
+        padding: 0;
+      }
+
+      span {
+        font-size: 40px;
+      }
+    }
+
+    .details {
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px solid rgba(0, 0, 0, 0.2);
+      font-size: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      row-gap: 5px;
+      div {
+        flex: 0 1 50%;
+      }
+      span {
+        display: block;
+      }
+
+      span.value {
+        font-weight: bold;
+      }
+    }
   }
 }
