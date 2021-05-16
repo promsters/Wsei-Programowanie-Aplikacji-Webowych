@@ -4,6 +4,15 @@ body {
   margin: 0;
   padding: 0;
   font-family: "FiraSans",Arial,Helvetica,Verdana,sans-serif;
+
+  &.edit-mode:before {
+    content: '';
+    position:absolute;
+    z-index: 25;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
 }
 
 * {
@@ -23,9 +32,9 @@ body {
 .input-box {
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   width: 40%;
   padding: 10px;
-  height: 60px;
 
   @media (max-width: 720px) {
     width: 100%;
@@ -37,28 +46,51 @@ body {
   }
 }
 
-.cities-box {
+.notes-box {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   column-gap: 10px;
   row-gap: 10px;
 
-  .city {
+  .note {
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+
     flex-grow: 1;
     min-width: 180px;
     max-width: 250px;
-    background: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(0, 0, 0, 1);
     padding: 5px;
 
-    &.prototype {
+    &.edited {
+      position: absolute;
+      max-width: none;
+      width: 30%;
+      left: 30%;
+      z-index: 50;
+      opacity: 1;
+
+      .edit-hidden {
+        display: none !important;
+      }
+
+      .edit-visible {
+        display: block !important;
+      }
+    }
+
+    .edit-visible {
       display: none;
     }
 
     .header {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: flex-end;
 
       h2 {
@@ -66,10 +98,11 @@ body {
         margin: 0;
         display: inline;
         padding: 0;
+        font-size: 14px;
       }
 
-      span {
-        font-size: 40px;
+      .pin {
+        cursor: pointer;
       }
     }
 
@@ -78,19 +111,44 @@ body {
       padding-top: 5px;
       border-top: 1px solid rgba(0, 0, 0, 0.2);
       font-size: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      row-gap: 5px;
-      div {
-        flex: 0 1 50%;
-      }
-      span {
-        display: block;
-      }
 
-      span.value {
-        font-weight: bold;
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+
+        .actions {
+          margin: 10px 0 5px 0;
+
+          span {
+            cursor: pointer;
+            opacity: 0.5;
+
+            &:hover {
+              opacity: 1;
+            }
+
+
+            &:not(:first-child) {
+              margin-left: 5px;
+            }
+          }
+        }
+
+        .save {
+          margin-top: 5px;
+
+          .edit-save {
+            padding: 5px;
+            cursor: pointer;
+            background-color: #328600;
+            color: #fff;
+          }
+        }
+
+        .created-at {
+          font-size: 11px;
+        }
       }
     }
   }

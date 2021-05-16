@@ -1,10 +1,12 @@
+import {dateToRelativeString, htmlToElement} from "./Utils";
+
 class Note {
-    private title: string;
-    private message: string;
-    private color: string;
-    private pinned: boolean;
-    private createdAt: Date;
-    private editedAt?: Date;
+    title: string;
+    message: string;
+    color: string;
+    pinned: boolean;
+    createdAt: Date;
+    editedAt?: Date;
 
     constructor(
         title: string,
@@ -20,6 +22,45 @@ class Note {
         this.pinned = pinned;
         this.createdAt = createdAt;
         this.editedAt = editedAt;
+    }
+
+    togglePinned(): void {
+        this.pinned = !this.pinned;
+    }
+
+    getHtml(): Element {
+        return htmlToElement(`
+            <div class="note">
+                <div class="header">
+                    <h2 class="edit-hidden">${this.title}</h2>
+                    <input type="text" class="edit-visible" value="${this.title}" name="title" />
+                    <span class="pin edit-hidden"><i class="${this.pinned ? "fas" : "far"} fa-bookmark"></i></span>
+                </div>
+                <div class="details">
+                    <span class="edit-hidden">${this.message}</span>
+                    <textarea class="edit-visible" name="message">${this.message}</textarea>
+                    <div class="bottom">
+                        <div class="actions edit-hidden">
+                            <span class="remove" title="Usuń">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                            <span class="edit" title="Edytuj">
+                                <i class="far fa-edit"></i>
+                            </span>
+                            <span class="change-color" title="Zmień kolor">
+                                <i class="fas fa-palette"></i>
+                            </span>
+                        </div>
+                        <div class="save edit-visible">
+                            <button class="edit-save">Zapisz</button>
+                        </div>
+                        <div class="created-at">
+                            ${dateToRelativeString(this.createdAt)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
     }
 
     static createFromJson(data: NoteInterface): Note {
