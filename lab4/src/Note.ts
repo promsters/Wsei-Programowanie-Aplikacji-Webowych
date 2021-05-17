@@ -11,7 +11,7 @@ class Note {
     constructor(
         title: string,
         message: string,
-        color: string = "red",
+        color: string = "#fff",
         pinned: boolean = false,
         createdAt: Date = new Date(),
         editedAt: Date = null
@@ -30,7 +30,7 @@ class Note {
 
     getHtml(): Element {
         return htmlToElement(`
-            <div class="note">
+            <div class="note" style="--background: ${this.color};">
                 <div class="header">
                     <h2 class="edit-hidden">${this.title}</h2>
                     <input type="text" class="edit-visible" value="${this.title}" name="title" />

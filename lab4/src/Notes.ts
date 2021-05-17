@@ -1,14 +1,28 @@
 import Note from "./Note";
 import AppStorage from "./AppStorage";
+import Colorpicker from "./Colorpicker";
+
+const NoteColors = [
+    '#3dd9c3', '#f530a5', '#6af51a', '#144274',
+    '#000000', '#b564cc', '#78a7fe', '#5aca86',
+    '#655855', '#ee4047', '#e5fd9c', '#688f8b',
+    '#e4e32f', '#99adda', '#7f492b', '#510758'
+];
 
 class Notes {
     private notes: Note[];
     private container: HTMLElement;
     private storage: AppStorage;
+    private colorpicker: Colorpicker;
 
     constructor(container: HTMLElement, storage: AppStorage) {
         this.container = container;
         this.storage = storage;
+        this.colorpicker = new Colorpicker(
+            container.querySelector('.color-picker'),
+            NoteColors
+        );
+
         this.init();
     }
 
@@ -58,6 +72,7 @@ class Notes {
             this.registerPinAction(element, note);
             this.registerDeleteAction(element, note);
             this.registerEditAction(element, note);
+            this.registerColorpickAction(element, note);
         });
     }
 
@@ -65,6 +80,7 @@ class Notes {
         const pin = element.querySelector('.pin');
         pin.addEventListener('click', () => {
             note.togglePinned();
+            this.storage.saveNotes(this.notes);
             this.renderNotes();
         });
     }
@@ -98,6 +114,20 @@ class Notes {
 
             document.body.classList.remove('edit-mode');
         });
+    }
+
+    private registerColorpickAction(element: HTMLElement, note: Note): void {
+        const colorButton = element.querySelector('.change-color') as HTMLElement;
+
+        colorButton.addEventListener('click', () => {
+            this.colorpicker.show(colorButton, (color: string) => this.onNoteColorSelection(note, color));
+        });
+    }
+
+    private onNoteColorSelection(note: Note, color: string): void {
+        note.color = color;
+        this.storage.saveNotes(this.notes);
+        this.renderNotes();
     }
 }
 
