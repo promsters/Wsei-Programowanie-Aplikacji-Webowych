@@ -24,8 +24,8 @@ class Colorpicker {
     }
 
     show(trigger: HTMLElement, selectHandler: (color: string) => void): void {
-        this.container.style.left = `${trigger.offsetLeft + 20}px`;
-        this.container.style.top = `${trigger.offsetTop + 20}px`;
+        this.container.style.left = `${trigger.getBoundingClientRect().left + 20}px`;
+        this.container.style.top = `${trigger.getBoundingClientRect().top + 20}px`;
 
         this.container.style.display = 'flex';
 

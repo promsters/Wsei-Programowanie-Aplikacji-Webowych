@@ -1,8 +1,10 @@
 import Note from "./Note";
 
 interface AppStorage {
-    saveNotes(notes: Note[]): void;
-    getNotes(): Note[];
+    addNote(note: Note): Promise<Note>;
+    removeNote(note: Note): void;
+    updateNote(note: Note): void;
+    getNotes(): Promise<Note[]>;
 }
 
 export default AppStorage;

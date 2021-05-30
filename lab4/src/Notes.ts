@@ -27,9 +27,12 @@ class Notes {
     }
 
     private init(): void {
-        this.notes = this.storage.getNotes();
+        this.storage.getNotes().then(notes => {
+            this.notes = notes;
+            this.renderNotes();
+        })
+
         this.registerListeners();
-        this.renderNotes();
     }
 
     private registerListeners(): void {
@@ -40,9 +43,10 @@ class Notes {
                 (form.querySelector('textarea[name=message]') as HTMLTextAreaElement).value
             );
 
-            this.notes.push(note);
-            this.storage.saveNotes(this.notes);
-            this.renderNotes();
+            this.storage.addNote(note).then(note => {
+                this.notes.push(note);
+                this.renderNotes();
+            });
         });
     }
 
@@ -80,7 +84,7 @@ class Notes {
         const pin = element.querySelector('.pin');
         pin.addEventListener('click', () => {
             note.togglePinned();
-            this.storage.saveNotes(this.notes);
+            this.storage.updateNote(note);
             this.renderNotes();
         });
     }
@@ -89,6 +93,7 @@ class Notes {
         const delButton = element.querySelector('.remove');
         delButton.addEventListener('click', () => {
             this.notes.splice(this.notes.indexOf(note), 1);
+            this.storage.removeNote(note);
             this.renderNotes();
         });
     }
@@ -109,7 +114,7 @@ class Notes {
             note.title = inputTitle.value;
             note.message = inputMessage.value;
 
-            this.storage.saveNotes(this.notes);
+            this.storage.updateNote(note);
             this.renderNotes();
 
             document.body.classList.remove('edit-mode');
@@ -126,7 +131,7 @@ class Notes {
 
     private onNoteColorSelection(note: Note, color: string): void {
         note.color = color;
-        this.storage.saveNotes(this.notes);
+        this.storage.updateNote(note);
         this.renderNotes();
     }
 }

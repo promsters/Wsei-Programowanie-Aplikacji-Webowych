@@ -1,6 +1,7 @@
 import {dateToRelativeString, htmlToElement} from "./Utils";
 
 class Note {
+    id: string | null;
     title: string;
     message: string;
     color: string;
@@ -14,7 +15,8 @@ class Note {
         color: string = "#fff",
         pinned: boolean = false,
         createdAt: Date = new Date(),
-        editedAt: Date = null
+        editedAt: Date = null,
+        id: string | null = null
     ) {
         this.title = title;
         this.message = message;
@@ -22,6 +24,7 @@ class Note {
         this.pinned = pinned;
         this.createdAt = createdAt;
         this.editedAt = editedAt;
+        this.id = id;
     }
 
     togglePinned(): void {
@@ -70,12 +73,14 @@ class Note {
             data.color,
             data.pinned,
             new Date(data.createdAt),
-            data.editedAt !== null ? new Date(data.editedAt) : null
+            data.editedAt !== null ? new Date(data.editedAt) : null,
+            data.id
         );
     }
 }
 
 interface NoteInterface {
+    id: string;
     title: string;
     message: string;
     color: string;

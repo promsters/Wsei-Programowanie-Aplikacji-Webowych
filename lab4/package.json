@@ -19,6 +19,7 @@
     "start": "webpack-dev-server --content-base src"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3"
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "firebase": "^8.6.3"
   }
 }
