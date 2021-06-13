@@ -1,5 +1,5 @@
 export const CONFIG = {
-    storageType: "firestore",
+    storageType: "local",
     firebaseConfig: {
         apiKey: "AIzaSyAjzvxYRMxBtVi62KbuSVDA7MjIlSDGS3w",
         authDomain: "wseiprogaplwebnotes.firebaseapp.com",

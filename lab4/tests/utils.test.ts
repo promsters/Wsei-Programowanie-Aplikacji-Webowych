@@ -21,6 +21,7 @@ test('dateToRelativeString for today', () => {
 
 test('dateToRelativeString for yesterday', () => {
     const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
 
     expect(dateToRelativeString(yesterday)).toBe(`wczoraj, ${yesterday.getHours().toString().padStart(2, '0')}:${yesterday.getMinutes().toString().padStart(2, '0')}`)
 });
